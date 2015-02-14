@@ -78,19 +78,24 @@ var app = {
 	// The scope of 'this' is the event. In order to call the 'receivedEvent'
 	// function, we must explicitly call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
+		app.receivedEvent('deviceready');
 
-		if (window.plugins && window.plugins.AdMob) {
-			window.plugins.AdMob.setOptions({
-				publisherId: 'ca-app-pub-4781658768584449/6096418506',
-				bannerAtTop: false, // set to true, to put banner at top
-				overlap: false, // set to true, to allow banner overlap webview
-				offsetTopBar: false, // set to true to avoid ios7 status bar overlap
-				isTesting: false, // receiving test ad
-				autoShow: true // auto show interstitial ad when loaded
-			});
-			window.plugins.AdMob.createBannerView();
-		} else {
-			 alert('admob plugin not ready');
-		}
+		AdMob.createBanner({
+			adId: 'ca-app-pub-4781658768584449/6096418506',
+			position: AdMob.AD_POSITION.BOTTOM_CENTER,
+			autoShow: true,
+			isTesting: true
+		});
+	},
+	// Update DOM on a Received Event
+	receivedEvent: function(id) {
+		var parentElement = document.getElementById(id);
+		var listeningElement = parentElement.querySelector('.listening');
+		var receivedElement = parentElement.querySelector('.received');
+
+		listeningElement.setAttribute('style', 'display:none;');
+		receivedElement.setAttribute('style', 'display:block;');
+
+		console.log('Received Event: ' + id);
 	}
 };
